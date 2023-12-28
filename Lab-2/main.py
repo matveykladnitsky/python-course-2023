@@ -101,6 +101,6 @@ def task_3():
         
         print(result)
 
-# task_1()
-# task_2()
+task_1()
+task_2()
 task_3()
