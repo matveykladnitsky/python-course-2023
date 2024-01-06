@@ -16,6 +16,7 @@ COST_COL = 'Price'
 # task 3
 YEAR_COL = 'Year-Of-Publication'
 
+
 def find_col_idx(col_name):
     with open(FILE_PATH, newline=NEWLINE, encoding='latin-1', mode='r') as file:
         rows = csv.reader(file)
@@ -25,7 +26,7 @@ def find_col_idx(col_name):
         for i in range(len(header_cells)):
             if header_cells[i].lower() == col_name.lower():
                 return i
-        
+
         return -1
 
 
@@ -36,7 +37,7 @@ def task_1():
 
         book_title_idx = find_col_idx(NAME_COL)
 
-        if(book_title_idx == -1):
+        if (book_title_idx == -1):
             return '[TASK 1]: Failed'
 
         for row in rows:
@@ -44,7 +45,8 @@ def task_1():
             if len(book_title) > MAX_CHAR_COUNT:
                 result += 1
 
-        print('[TASK 1]: Вывести количество записей, у которых в поле Название строка длиннее 30 символов:', result)  
+        print('[TASK 1]: Вывести количество записей, у которых в поле Название строка длиннее 30 символов:', result)
+
 
 def task_2():
     print('[TASK 2]: Реализовать поиск книги по автору, использовать ограничение на выдачу (до 200 р):')
@@ -59,7 +61,6 @@ def task_2():
 
         next(rows)
 
-
         for row in rows:
             try:
                 parsed_row = str(row[0]).split(";")
@@ -72,7 +73,9 @@ def task_2():
             except:
                 pass
 
+
 def task_3():
+    print('[TASK 3]: Реализовать генератор библиографических ссылок вида <автор>. <название> - <год> для 20 записей. Записи выбрать произвольно. Список сохраняется как отдельный файл текстового формата с нумерацией строк.')
     with open(FILE_PATH, newline=NEWLINE, encoding='latin-1', mode='r') as file:
         rows = csv.reader(file)
         next(rows)
@@ -84,9 +87,10 @@ def task_3():
         year_idx = find_col_idx(YEAR_COL)
 
         count = 0
+        pos = 0
 
         for row in rows:
-            if(count >= 20):
+            if (count >= 20):
                 break
             try:
                 parsed_row = str(row[0]).split(";")
@@ -94,12 +98,18 @@ def task_3():
                 current_book = parsed_row[book_title_idx]
                 current_year = int(parsed_row[year_idx])
 
-                result += f'{current_author}. {current_book} - {current_year}\n'
-                count+=1
+                pos = count + 1
+                result += f'({pos}). {current_author}. {current_book} - {current_year}\n'
+                count += 1
             except:
                 pass
-        
-        print(result)
+
+        result_file = open("links.txt", "w")
+        result_file.write(result)
+        result_file.close()
+
+        print("Данные были сохранены в файл links.txt")
+
 
 task_1()
 task_2()
